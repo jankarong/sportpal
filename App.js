@@ -9,6 +9,8 @@ import { theme } from './theme/theme';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import BottomNavigation from './components/BottomNavigation';
+import EventDetailScreen from './screens/EventDetailScreen';
+import EventPaymentScreen from './screens/EventPaymentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +32,16 @@ export default function App() {
           <Stack.Screen 
             name="MainTabs" 
             component={BottomNavigation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="EventDetail" 
+            component={EventDetailScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="EventPayment" 
+            component={EventPaymentScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
