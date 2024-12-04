@@ -18,7 +18,7 @@ const EventCard = ({ title, date, location, spots, price, distance, host, image,
             style={styles.eventImage} 
           />
           <View style={styles.contentContainer}>
-            <Text variant="titleLarge" style={styles.title}>{title}</Text>
+            <Text variant="titleMedium" style={styles.title}>{title}</Text>
             <Text variant="bodyMedium" style={[styles.date, { color: theme.colors.primary }]}>
               {date}
             </Text>
@@ -31,7 +31,7 @@ const EventCard = ({ title, date, location, spots, price, distance, host, image,
                 <Text variant="bodyMedium" style={styles.spots}>{spots}</Text>
               </View>
               <View style={styles.infoItem}>
-                <Text variant="bodyMedium" style={styles.price}>{price}</Text>
+                <Text variant="bodyMedium" style={[styles.price, { color: theme.colors.onSurface }]}>{price}</Text>
               </View>
             </View>
 
@@ -64,31 +64,36 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
-        <View style={styles.locationContainer}>
-          <MaterialCommunityIcons name="map-marker" size={24} color={theme.colors.onPrimary} />
-          <Text variant="labelMedium" style={{ color: theme.colors.onPrimary }}>Golden Village·Richmond</Text>
-          <MaterialCommunityIcons name="chevron-down" size={24} color={theme.colors.onPrimary} />
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 0, backgroundColor: theme.colors.primary }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+          <StatusBar barStyle="light-content" />
+          <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+            <View style={styles.locationContainer}>
+              <MaterialCommunityIcons name="map-marker" size={24} color={theme.colors.onPrimary} />
+              <Text variant="labelMedium" style={{ color: theme.colors.onPrimary }}>Golden Village·Richmond</Text>
+              <MaterialCommunityIcons name="chevron-down" size={24} color={theme.colors.onPrimary} />
+            </View>
+            <IconButton icon="magnify" size={24} iconColor={theme.colors.onPrimary} />
+          </View>
+          
+          <Text variant="titleLarge" style={styles.sectionTitle}>Suggested Events</Text>
+          
+          <ScrollView style={styles.scrollView}>
+            {events.map((event, index) => (
+              <EventCard
+                key={index}
+                {...event}
+                onBookmark={() => {}}
+                onShare={() => {}}
+                onPress={() => handleEventPress(event)}
+              />
+            ))}
+          </ScrollView>
         </View>
-        <IconButton icon="magnify" size={24} iconColor={theme.colors.onPrimary} />
-      </View>
-      
-      <Text variant="titleLarge" style={styles.sectionTitle}>Suggested Events</Text>
-      
-      <ScrollView style={styles.scrollView}>
-        {events.map((event, index) => (
-          <EventCard
-            key={index}
-            {...event}
-            onBookmark={() => {}}
-            onShare={() => {}}
-            onPress={() => handleEventPress(event)}
-          />
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
@@ -115,6 +120,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     paddingHorizontal: 16,
     marginBottom: 16,
+    marginTop: 16,
   },
   card: {
     marginBottom: 16,
@@ -133,8 +139,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   date: {
@@ -154,9 +158,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 4,
   },
-  price: {
-    color: '#4CAF50',
-  },
+  
   bottomRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',

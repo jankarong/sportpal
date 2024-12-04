@@ -18,7 +18,7 @@ const EventCard = ({ title, date, location, spots, price, distance, host, image,
           style={styles.eventImage} 
         />
         <View style={styles.contentContainer}>
-          <Text variant="titleLarge" style={styles.title}>{title}</Text>
+          <Text variant="titleMedium" style={styles.title}>{title}</Text>
           <Text variant="bodyMedium" style={[styles.date, { color: theme.colors.primary }]}>
             {date}
           </Text>
@@ -75,77 +75,82 @@ export default function EventsScreen({ navigation }) {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
-        <IconButton 
-          icon="chevron-left" 
-          size={24} 
-          iconColor={theme.colors.onPrimary}
-          onPress={() => navigation.goBack()} 
-        />
-        <Text variant="headlineSmall" style={{ color: theme.colors.onPrimary }}>Events</Text>
-        <IconButton icon="magnify" size={24} iconColor={theme.colors.onPrimary} />
-      </View>
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-        {categories.map((category) => (
-          <TouchableOpacity
-            key={category.id}
-            onPress={() => setSelectedCategory(category.id)}
-            style={[
-              styles.categoryButton,
-              selectedCategory === category.id && styles.selectedCategory,
-            ]}
-          >
-            <MaterialCommunityIcons
-              name={category.icon}
-              size={24}
-              color={selectedCategory === category.id ? theme.colors.primary : theme.colors.onSurface}
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 0, backgroundColor: theme.colors.primary }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+          <StatusBar barStyle="light-content" />
+          <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+            <IconButton 
+              icon="chevron-left" 
+              size={24} 
+              iconColor={theme.colors.onPrimary}
+              onPress={() => navigation.goBack()} 
             />
-            <Text
-              style={[
-                styles.categoryText,
-                selectedCategory === category.id && styles.selectedCategoryText,
-              ]}
-            >
-              {category.name}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+            <Text variant="headlineSmall" style={{ color: theme.colors.onPrimary }}>Events</Text>
+            <IconButton icon="magnify" size={24} iconColor={theme.colors.onPrimary} />
+          </View>
 
-      <View style={styles.filterRow}>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text>Date</Text>
-          <MaterialCommunityIcons name="chevron-down" size={20} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text>Time</Text>
-          <MaterialCommunityIcons name="chevron-down" size={20} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text>Distance</Text>
-          <MaterialCommunityIcons name="chevron-down" size={20} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text>Price</Text>
-          <MaterialCommunityIcons name="chevron-down" size={20} />
-        </TouchableOpacity>
-      </View>
-      
-      <ScrollView style={styles.scrollView}>
-        {filteredEvents.map((event, index) => (
-          <EventCard
-            key={index}
-            {...event}
-            onBookmark={() => {}}
-            onShare={() => {}}
-            onPress={() => handleEventPress(event)}
-          />
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
+            {categories.map((category) => (
+              <TouchableOpacity
+                key={category.id}
+                onPress={() => setSelectedCategory(category.id)}
+                style={[
+                  styles.categoryButton,
+                  selectedCategory === category.id && styles.selectedCategory,
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name={category.icon}
+                  size={24}
+                  color={selectedCategory === category.id ? theme.colors.primary : theme.colors.onSurface}
+                />
+                <Text
+                  style={[
+                    styles.categoryText,
+                    selectedCategory === category.id && styles.selectedCategoryText,
+                  ]}
+                >
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          <View style={styles.filterRow}>
+            <TouchableOpacity style={styles.filterButton}>
+              <Text>Date</Text>
+              <MaterialCommunityIcons name="chevron-down" size={20} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.filterButton}>
+              <Text>Time</Text>
+              <MaterialCommunityIcons name="chevron-down" size={20} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.filterButton}>
+              <Text>Distance</Text>
+              <MaterialCommunityIcons name="chevron-down" size={20} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.filterButton}>
+              <Text>Price</Text>
+              <MaterialCommunityIcons name="chevron-down" size={20} />
+            </TouchableOpacity>
+          </View>
+          
+          <ScrollView style={styles.scrollView}>
+            {filteredEvents.map((event, index) => (
+              <EventCard
+                key={index}
+                {...event}
+                onBookmark={() => {}}
+                onShare={() => {}}
+                onPress={() => handleEventPress(event)}
+              />
+            ))}
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 }
 
@@ -169,7 +174,7 @@ const styles = StyleSheet.create({
   categoryButton: {
     alignItems: 'center',
     marginRight: 24,
-    paddingVertical: 8,
+    paddingVertical: 12,
   },
   selectedCategory: {
     borderBottomWidth: 2,
@@ -177,7 +182,6 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     marginTop: 4,
-    fontSize: 12,
   },
   selectedCategoryText: {
     color: '#1a73e8',
@@ -217,8 +221,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   date: {

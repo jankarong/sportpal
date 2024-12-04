@@ -2,7 +2,9 @@
 export const events = [
   {
     title: 'Tennis Doubles',
-    date: 'Fri, Dec 6 17:30-21:30',
+    date: 'Fri, Dec 6',
+    time: '17:30-21:30',
+    year: '2024',
     location: 'Richmond Tennis Club',
     address: '4551 No.3 Rd #138, Richmond, BC V6X 2C3',
     spots: '3/6',
@@ -26,7 +28,9 @@ Court fees are included in the price. See you on the court!`
   },
   {
     title: 'Badminton Meetup',
-    date: 'Thu, Nov 14 20:00-22:00',
+    date: 'Thu, Nov 14',
+    time: '20:00-22:00',
+    year: '2024',
     location: 'Drive Badminton Centre',
     address: '4551 No.3 Rd #138, Richmond, BC V6X 2C3',
     spots: '5/12',
@@ -48,7 +52,9 @@ Total is usually 13-15 per person for two hours`
   },
   {
     title: 'Basketball Pickup Game',
-    date: 'Thu, Dec 5 17:00-19:00',
+    date: 'Thu, Dec 5',
+    time: '17:00-19:00',
+    year: '2024',
     location: 'Richmond Community Center',
     address: '4551 No.3 Rd #138, Richmond, BC V6X 2C3',
     spots: '3/6',
@@ -74,7 +80,9 @@ The court is free to use, just show up and have fun!`
   },
   {
     title: 'Youth Basketball Training',
-    date: 'Fri, Dec 7 10:00-12:00',
+    date: 'Fri, Dec 7',
+    time: '10:00-12:00',
+    year: '2024',
     location: 'Richmond Sports Complex',
     address: '4551 No.3 Rd #138, Richmond, BC V6X 2C3',
     spots: '2/12',

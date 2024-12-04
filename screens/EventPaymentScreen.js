@@ -9,88 +9,93 @@ const EventPaymentScreen = ({ route, navigation }) => {
   const { event } = route.params;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
-        <IconButton 
-          icon="chevron-left" 
-          size={24} 
-          iconColor={theme.colors.onPrimary}
-          onPress={() => navigation.goBack()} 
-        />
-        <Text variant="headlineSmall" style={{ color: theme.colors.onPrimary }}>Registration</Text>
-        <View style={{ width: 48 }} />
-      </View>
-
-      <Surface style={styles.eventCard} elevation={0}>
-        <View style={styles.eventRow}>
-          <Image 
-            source={images[event.image]} 
-            style={styles.eventImage} 
-            resizeMode="cover"
-          />
-          <View style={styles.eventDetails}>
-            <Text variant="titleMedium" style={styles.eventTitle}>{event.title}</Text>
-            <View style={styles.eventInfo}>
-              <MaterialCommunityIcons name="clock-outline" size={16} color={theme.colors.onSurfaceVariant} />
-              <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-                {event.date}, {event.startTime}-{event.endTime}
-              </Text>
-            </View>
-            <View style={styles.eventInfo}>
-              <MaterialCommunityIcons name="map-marker-outline" size={16} color={theme.colors.onSurfaceVariant} />
-              <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-                {event.location}
-              </Text>
-            </View>
-            <View style={styles.eventInfo}>
-              <MaterialCommunityIcons name="account-group-outline" size={16} color={theme.colors.onSurfaceVariant} />
-              <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-                5/12 going
-              </Text>
-            </View>
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 0, backgroundColor: theme.colors.primary }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+          <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+            <IconButton 
+              icon="chevron-left" 
+              size={24} 
+              iconColor={theme.colors.onPrimary}
+              onPress={() => navigation.goBack()} 
+            />
+            <Text variant="headlineSmall" style={{ color: theme.colors.onPrimary }}>Registration</Text>
+            <View style={{ width: 48 }} />
           </View>
+
+          <Surface style={styles.eventCard} elevation={0}>
+            <View style={styles.eventRow}>
+              <Image 
+                source={images[event.image]} 
+                style={styles.eventImage} 
+                resizeMode="cover"
+              />
+              <View style={styles.eventDetails}>
+                <Text variant="titleMedium" style={styles.eventTitle}>{event.title}</Text>
+                <View style={styles.eventInfo}>
+                  <MaterialCommunityIcons name="clock-outline" size={16} color={theme.colors.onSurfaceVariant} />
+                  <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+                    {event.date}, {event.time}
+                  </Text>
+                </View>
+                <View style={styles.eventInfo}>
+                  <MaterialCommunityIcons name="map-marker-outline" size={16} color={theme.colors.onSurfaceVariant} />
+                  <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+                    {event.location}
+                  </Text>
+                </View>
+                <View style={styles.eventInfo}>
+                  <MaterialCommunityIcons name="account-group-outline" size={16} color={theme.colors.onSurfaceVariant} />
+                  <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+                    {event.spots} going
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </Surface>
+
+          <View style={styles.ticketSection}>
+            <Text style={styles.sectionTitle}>Ticket</Text>
+            <TouchableOpacity style={styles.ticketCard}>
+              <Text variant="bodyLarge">1 ticket</Text>
+              <Text variant="bodyLarge">{event.price}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.totalSection}>
+            <Text variant="titleMedium">Total</Text>
+            <Text variant="titleMedium">{event.price}</Text>
+          </View>
+
+          <View style={styles.paymentButtons}>
+            <TouchableOpacity 
+              style={styles.paypalButton}
+              onPress={() => {/* Handle PayPal payment */}}
+            >
+              <Text style={styles.paypalText}>PayPal</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.creditCardButton}
+              onPress={() => {/* Handle credit card payment */}}
+            >
+              <MaterialCommunityIcons name="credit-card-outline" size={20} color="white" />
+              <Text style={styles.creditCardText}>Credit or debit card</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.poweredByContainer}>
+            <Text style={styles.poweredByText}>Powered by </Text>
+            <Text style={styles.paypalPoweredText}>PayPal</Text>
+          </View>
+
+          <Text style={styles.footnote}>
+            You'll come back to sportpal after completing payment on the PayPal website.
+          </Text>
         </View>
-      </Surface>
-
-      <View style={styles.ticketSection}>
-        <Text style={styles.sectionTitle}>Ticket</Text>
-        <TouchableOpacity style={styles.ticketCard}>
-          <Text variant="bodyLarge">1 ticket</Text>
-          <Text variant="bodyLarge">{event.price}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.totalSection}>
-        <Text variant="titleMedium">Total</Text>
-        <Text variant="titleMedium">{event.price}</Text>
-      </View>
-
-      <View style={styles.paymentButtons}>
-        <TouchableOpacity 
-          style={styles.paypalButton}
-          onPress={() => {/* Handle PayPal payment */}}
-        >
-          <Text style={styles.paypalText}>PayPal</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.creditCardButton}
-          onPress={() => {/* Handle credit card payment */}}
-        >
-          <MaterialCommunityIcons name="credit-card-outline" size={20} color="white" />
-          <Text style={styles.creditCardText}>Credit or debit card</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.poweredByContainer}>
-        <Text style={styles.poweredByText}>Powered by </Text>
-        <Text style={styles.paypalPoweredText}>PayPal</Text>
-      </View>
-
-      <Text style={styles.footnote}>
-        You'll come back to sportpal after completing payment on the PayPal website.
-      </Text>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 };
 
@@ -155,9 +160,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#e0e0e0',
   },
   paymentButtons: {
     padding: 16,
