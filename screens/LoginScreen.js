@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,9 +6,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const { height, width } = Dimensions.get('window');
 
 export default function LoginScreen({ navigation }) {
+    const [isPressed, setIsPressed] = useState(false);  // Changed from isHovered
+
     return (
         <View style={styles.container}>
-            {/* Logo Section - 25% Screen */}
             <View style={styles.logoContainer}>
                 <View style={styles.logoContent}>
                     <Image
@@ -69,13 +70,22 @@ export default function LoginScreen({ navigation }) {
                     </View>
 
                     {/* Sign Up Link */}
-                    <View style={styles.signupContainer}>
-                        <Text variant="bodyMedium" style={styles.signupText}>
-                            Don't have an account?{' '}
-                            <Text style={styles.signupLink} onPress={() => navigation.navigate('SignUp')}>
-                                Sign up
+                     <View style={styles.signupContainer}>
+                        <View style={styles.signupTextWrapper}>
+                            <Text variant="bodyMedium" style={styles.signupText}>
+                                Don't have an account?
                             </Text>
-                        </Text>
+                            <TouchableOpacity
+                                onPressIn={() => setIsPressed(true)}
+                                onPressOut={() => setIsPressed(false)}
+                                onPress={() => navigation.navigate('SignUp')}
+                                activeOpacity={0.7}
+                            >
+                                <Text style={[styles.signupLink, isPressed && styles.signupLinkPressed]}>
+                                    {' '}Sign up
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
                     {/* Main Login Button */}
@@ -105,7 +115,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        paddingHorizontal: 20, // Add horizontal padding
+        paddingHorizontal: 20,
     },
     logoContent: {
         alignItems: 'center',
@@ -113,8 +123,8 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     logo: {
-        width: 300, // Adjusted size
-        height: 300, // Adjusted size
+        width: 300,
+        height: 300,
         tintColor: '#FFFFFF',
         marginLeft: 18,
         marginTop: 32,
@@ -184,12 +194,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 24,
     },
+    signupTextWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     signupText: {
         color: '#666666',
     },
     signupLink: {
         color: '#2955F9',
         fontWeight: '600',
+    },
+    signupLinkPressed: {
+        color: '#FFCC5F',
     },
     loginButton: {
         borderRadius: 25,
