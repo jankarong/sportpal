@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Image, StyleSheet, Dimensions } from 'react-native';
-import { Button } from 'react-native-paper';
+import { View, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Text } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,14 +16,12 @@ export default function WelcomeScreen({ navigation }) {
             
             {/* Button Container */}
             <View style={styles.buttonContainer}>
-                <Button
-                    mode="contained"
-                    onPress={() => navigation.navigate('Login')}
+                <TouchableOpacity 
                     style={styles.button}
-                    contentStyle={styles.buttonContent}
+                    onPress={() => navigation.navigate('Login')}
                 >
-                    Get Started
-                </Button>
+                    <Text style={styles.buttonText}>Get Started</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -41,16 +39,21 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         position: 'absolute',
-        bottom: 40,
-        left: 0,
-        right: 0,
-        paddingHorizontal: 24,
+        bottom: 66,
+        left: 24,
+        right: 24,
     },
     button: {
-        borderRadius: 12,
-        paddingVertical: 8,
+        backgroundColor: '#FFCC5F',
+        height: 45,
+        borderRadius: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: 'transparent',
     },
-    buttonContent: {
-        paddingVertical: 8,
-    },
+    buttonText: {
+        color: '#000000',
+        fontSize: 16,
+        fontWeight: '500',
+    }
 });
