@@ -9,7 +9,7 @@ export default function SignUpScreen({ navigation }) {
 
     return (
         <ScrollView style={styles.container} bounces={false}>
-            {/* Logo Section */}
+
             <View style={styles.logoContainer}>
                 <View style={styles.logoContent}>
                     <Image
@@ -20,14 +20,12 @@ export default function SignUpScreen({ navigation }) {
                 </View>
             </View>
 
-            {/* Form Container */}
             <View style={styles.formWrapper}>
                 <View style={styles.formContainer}>
                     <Text variant="headlineMedium" style={styles.GetStartedtitle}>
                         Get Started Now
                     </Text>
 
-                    {/* Sign Up Form */}
                     <TextInput
                         mode="outlined"
                         label="First Name"
@@ -67,7 +65,6 @@ export default function SignUpScreen({ navigation }) {
                         dense
                     />
 
-                    {/* Terms and Conditions */}
                     <View style={styles.termsContainer}>
                         <Checkbox.Android
                             status={termsAccepted ? 'checked' : 'unchecked'}
@@ -82,7 +79,6 @@ export default function SignUpScreen({ navigation }) {
                         </Text>
                     </View>
 
-                    {/* Sign Up Button */}
                     <Button
                         mode="contained"
                         onPress={() => navigation.navigate('MainTabs')}
@@ -93,7 +89,6 @@ export default function SignUpScreen({ navigation }) {
                         Sign up
                     </Button>
 
-                    {/* Login Section */}
                     <View style={styles.loginSection}>
                         <View style={styles.loginHeader}>
                             <Text style={styles.loginText}>
@@ -102,7 +97,6 @@ export default function SignUpScreen({ navigation }) {
                             </Text>
                         </View>
 
-                        {/* Login Form */}
                         <View style={styles.inputGroup}>
                             <Text style={styles.inputLabel}>Log in</Text>
                             <TextInput
@@ -123,7 +117,6 @@ export default function SignUpScreen({ navigation }) {
                             dense
                         />
 
-                        {/* Social Login Buttons */}
                         <View style={styles.socialButtonsRow}>
                             <Button
                                 mode="outlined"
@@ -185,6 +178,7 @@ const styles = StyleSheet.create({
         color: '#2955F9',
         marginBottom: 24,
         fontSize: 24,
+        fontWeight: '800',
     },
     input: {
         marginBottom: 8,

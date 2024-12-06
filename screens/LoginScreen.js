@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const { height, width } = Dimensions.get('window');
 
 export default function LoginScreen({ navigation }) {
-    const [isPressed, setIsPressed] = useState(false);  // Changed from isHovered
+    const [isPressed, setIsPressed] = useState(false);
 
     return (
         <View style={styles.container}>
@@ -20,14 +20,12 @@ export default function LoginScreen({ navigation }) {
                 </View>
             </View>
 
-            {/* Form Container with Border Radius */}
             <View style={styles.formWrapper}>
                 <View style={styles.formContainer}>
                     <Text variant="headlineMedium" style={styles.welcomeText}>
                         Welcome Back
                     </Text>
 
-                    {/* Custom Login Input Group */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.inputLabel}>Log in</Text>
                         <TextInput
@@ -46,7 +44,6 @@ export default function LoginScreen({ navigation }) {
                         style={styles.passwordInput}
                     />
 
-                    {/* Social Login Buttons Row */}
                     <View style={styles.socialButtonsRow}>
                         <Button
                             mode="outlined"
@@ -69,8 +66,7 @@ export default function LoginScreen({ navigation }) {
                         </Button>
                     </View>
 
-                    {/* Sign Up Link */}
-                     <View style={styles.signupContainer}>
+                    <View style={styles.signupContainer}>
                         <View style={styles.signupTextWrapper}>
                             <Text variant="bodyMedium" style={styles.signupText}>
                                 Don't have an account?
@@ -88,7 +84,6 @@ export default function LoginScreen({ navigation }) {
                         </View>
                     </View>
 
-                    {/* Main Login Button */}
                     <Button
                         mode="contained"
                         onPress={() => navigation.navigate('MainTabs')}
@@ -146,6 +141,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#2955F9',
         marginBottom: 24,
+        fontWeight: '800',
     },
     inputGroup: {
         marginBottom: 16,

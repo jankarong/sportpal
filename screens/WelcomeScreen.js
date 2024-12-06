@@ -7,14 +7,13 @@ const { width, height } = Dimensions.get('window');
 export default function WelcomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
-            {/* Full Screen Image */}
+
             <Image 
                 source={require('../assets/image/welcome-page.png')}
                 style={styles.image}
                 resizeMode="cover"
             />
             
-            {/* Button Container */}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity 
                     style={styles.button}
