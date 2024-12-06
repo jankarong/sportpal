@@ -155,7 +155,7 @@ export default function SignUpScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1A73E8',
+        backgroundColor: '#2955F9',
     },
     logoContainer: {
         height: height * 0.12,
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     },
     GetStartedtitle: {
         textAlign: 'center',
-        color: '#1A73E8',
+        color: '#2955F9',
         marginBottom: 24,
         fontSize: 24,
     },
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     termsLink: {
-        color: '#1A73E8',
+        color: '#2955F9',
         textDecorationLine: 'underline',
     },
     signUpButton: {
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
         color: '#666666',
     },
     loginLink: {
-        color: '#1A73E8',
+        color: '#2955F9',
         fontWeight: '600',
     },
     inputGroup: {
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
         left: 10,
         backgroundColor: '#FFFFFF',
         paddingHorizontal: 4,
-        color: '#1A73E8',
+        color: '#2955F9',
         fontSize: 14,
         fontWeight: '500',
         zIndex: 1,
