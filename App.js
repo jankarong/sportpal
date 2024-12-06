@@ -8,6 +8,7 @@ import { theme } from './theme/theme';
 // Import screens
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
+import SignUpScreen from './screens/SignUpScreen';
 import BottomNavigation from './components/BottomNavigation';
 import EventDetailScreen from './screens/EventDetailScreen';
 import EventPaymentScreen from './screens/EventPaymentScreen';
@@ -28,6 +29,11 @@ export default function App() {
             name="Login" 
             component={LoginScreen}
             options={{ title: 'Login' }}
+          />
+          <Stack.Screen 
+            name="SignUp" 
+            component={SignUpScreen}
+            options={{ headerShown: false }}
           />
           <Stack.Screen 
             name="MainTabs" 
