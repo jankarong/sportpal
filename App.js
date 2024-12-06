@@ -8,10 +8,10 @@ import { theme } from './theme/theme';
 // Import screens
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
-import SignUpScreen from './screens/SignUpScreen';
 import BottomNavigation from './components/BottomNavigation';
 import EventDetailScreen from './screens/EventDetailScreen';
 import EventPaymentScreen from './screens/EventPaymentScreen';
+import BookingDetailScreen from './screens/BookingDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,11 +31,6 @@ export default function App() {
             options={{ title: 'Login' }}
           />
           <Stack.Screen 
-            name="SignUp" 
-            component={SignUpScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen 
             name="MainTabs" 
             component={BottomNavigation}
             options={{ headerShown: false }}
@@ -50,6 +45,12 @@ export default function App() {
             component={EventPaymentScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen 
+            name="BookingDetail" 
+            component={BookingDetailScreen}
+            options={{ headerShown: false }}
+          />
+
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>
