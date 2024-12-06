@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
     formWrapper: {
         flex: 1,
         backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
         marginTop: 20,
     },
     formContainer: {
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     socialButtonContent: {
-        height: 48,
+        height: 45,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         borderRadius: 25,
-        paddingVertical: 8,
-        marginHorizontal: 24,
+        marginBottom: 30,
+        height: 45,
     },
 });
