@@ -98,10 +98,10 @@ const BookingDetailScreen = ({ route, navigation }) => {
           <View style={styles.footer}>
             <Button 
               mode="contained" 
-              buttonColor={theme.colors.secondary}
-              textColor={theme.colors.onSecondaryContainer}
-              style={styles.attendButton}
-              contentStyle={styles.attendButtonContent}
+              buttonColor="#FFC43A"
+              textColor="#000000"
+              style={styles.bookButton}
+              contentStyle={styles.bookButtonContent}
               onPress={() => navigation.navigate('BookingConfirmation', { 
                 courtId,
                 date: selectedDate,
@@ -192,11 +192,6 @@ const styles = StyleSheet.create({
   footer: {
     padding: 16,
     backgroundColor: 'white',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
   bookButton: {
     borderRadius: 100,
