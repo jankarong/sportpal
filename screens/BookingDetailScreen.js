@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Image, SafeAreaView } from 'react-native';
-import { Text, IconButton, Button, useTheme, Chip } from 'react-native-paper';
+import { Text, IconButton, Button, useTheme, TextInput } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { courts } from '../data/courtDatabase';
 
@@ -21,12 +21,15 @@ const BookingDetailScreen = ({ route, navigation }) => {
   const { courtId } = route.params;
   const court = courts.find((c) => c.id === courtId);
   const theme = useTheme();
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
 
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={{ flex: 0, backgroundColor: theme.colors.primary }} />
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
         <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+          {/* Header section remains the same */}
           <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
             <IconButton 
               icon="chevron-left" 
@@ -35,12 +38,9 @@ const BookingDetailScreen = ({ route, navigation }) => {
               onPress={() => navigation.goBack()} 
             />
             <Text variant="titleLarge" style={[styles.headerTitle, { color: theme.colors.onPrimary }]}>
-              Court Details
+              Details
             </Text>
-            <View style={styles.headerActions}>
-              <IconButton icon="bookmark-outline" size={24} iconColor={theme.colors.onPrimary} />
-              <IconButton icon="share-variant-outline" size={24} iconColor={theme.colors.onPrimary} />
-            </View>
+            <View style={{ width: 48 }} />
           </View>
 
           <ScrollView style={styles.content}>
@@ -55,70 +55,58 @@ const BookingDetailScreen = ({ route, navigation }) => {
                 {court.title}
               </Text>
 
-              <View style={[styles.infoRow, { borderBottomColor: theme.colors.surfaceVariant }]}>
-                <MaterialCommunityIcons name="map-marker" size={24} color={theme.colors.primary} />
-                <View style={styles.infoTextContainer}>
-                  <View>
-                    <Text variant="bodyLarge">{court.location}</Text>
-                    <Text variant="bodyMedium" style={[styles.subText, { color: theme.colors.onSurfaceVariant }]}>
-                      {court.distance}
-                    </Text>
-                  </View>
+              <View style={styles.bookingForm}>
+                <View style={styles.inputSection}>
+                  <Text variant="titleSmall" style={styles.sectionTitle}>Day</Text>
+                  <TextInput
+                    mode="outlined"
+                    placeholder="Nov 19"
+                    value={selectedDate}
+                    onChangeText={setSelectedDate}
+                    style={styles.input}
+                  />
+                </View>
+
+                <View style={styles.inputSection}>
+                  <Text variant="titleSmall" style={styles.sectionTitle}>Time</Text>
+                  <TextInput
+                    mode="outlined"
+                    placeholder="9:30-11:00"
+                    value={selectedTime}
+                    onChangeText={setSelectedTime}
+                    style={styles.input}
+                  />
                 </View>
               </View>
 
-              <View style={[styles.infoRow, { borderBottomColor: theme.colors.surfaceVariant }]}>
-                <MaterialCommunityIcons name="dollar" size={24} color={theme.colors.primary} />
-                <View style={styles.infoTextContainer}>
-                  <Text variant="bodyLarge">{court.price}</Text>
-                </View>
-              </View>
-
-              <View style={styles.descriptionSection}>
-                <Text variant="titleMedium" style={styles.sectionTitle}>About this Court</Text>
-                <Text variant="bodyMedium" style={styles.description}>
-                  {court.description}
+              <View style={styles.priceContainer}>
+                <MaterialCommunityIcons name="help-circle-outline" size={24} color="#2955F9" />
+                <Text variant="bodyLarge" style={styles.priceText}>
+                  Price: {court.price}/hour
                 </Text>
               </View>
 
-              <View style={styles.facilitiesSection}>
-                <Text variant="titleMedium" style={styles.sectionTitle}>Facilities</Text>
-                <View style={styles.facilityChips}>
-                  {court.facilities.map((facility) => (
-                    <Chip key={facility} style={[styles.facilityChip, { backgroundColor: theme.colors.primaryContainer }]}>
-                      {facility}
-                    </Chip>
-                  ))}
-                </View>
-              </View>
-
-              <View style={styles.availableTimesSection}>
-                <Text variant="titleMedium" style={styles.sectionTitle}>Available Times</Text>
-                {court.available_day_time.map((slot, index) => (
-                  <View key={index} style={styles.availableSlot}>
-                    <Text variant="bodyMedium">{slot.day}</Text>
-                    <Text variant="bodyMedium">{slot.time}</Text>
-                  </View>
-                ))}
-              </View>
-
-              <View style={styles.contactSection}>
-                <Text variant="titleMedium" style={styles.sectionTitle}>Contact</Text>
-                <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-                  Phone: {court.contact}
+              <View style={styles.descriptionSection}>
+                <Text variant="titleMedium" style={styles.sectionTitle}>Description</Text>
+                <Text variant="bodyMedium" style={styles.description}>
+                  The Drive Basketball Court is a well-maintained outdoor court available for booking. Featuring regulation hoops and a smooth playing surface, it's great for pickup games, practice, or training. The court is open from 18:00-20:00.
                 </Text>
               </View>
             </View>
           </ScrollView>
 
-          <View style={[styles.footer, { borderTopColor: theme.colors.surfaceVariant }]}>
+          <View style={styles.footer}>
             <Button 
               mode="contained" 
-              buttonColor={theme.colors.primary}
-              textColor={theme.colors.onPrimary}
+              buttonColor="#FFC43A"
+              textColor="#000000"
               style={styles.bookButton}
               contentStyle={styles.bookButtonContent}
-              onPress={() => navigation.navigate('BookingFlow', { courtId: court.id })}
+              onPress={() => navigation.navigate('BookingConfirmation', { 
+                courtId,
+                date: selectedDate,
+                time: selectedTime
+              })}
             >
               Book Now
             </Button>
@@ -143,9 +131,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontWeight: '500',
   },
-  headerActions: {
-    flexDirection: 'row',
-  },
   content: {
     flex: 1,
   },
@@ -160,6 +145,15 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     fontWeight: '500',
   },
+  bookingForm: {
+    marginBottom: 24,
+  },
+  inputSection: {
+    marginBottom: 16,
+  },
+  input: {
+    marginTop: 8,
+  },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -173,9 +167,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 16,
   },
-  subText: {
-    marginTop: 4,
-  },
   descriptionSection: {
     marginTop: 24,
   },
@@ -187,42 +178,27 @@ const styles = StyleSheet.create({
     marginTop: 8,
     lineHeight: 20,
   },
-  facilitiesSection: {
-    marginTop: 24,
-  },
-  facilityChips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-    marginTop: 8,
-  },
-  facilityChip: {
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  availableTimesSection: {
-    marginTop: 24,
-  },
-  availableSlot: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 4,
-  },
-  contactSection: {
-    marginTop: 24,
-  },
-  footer: {
+  priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E3E1EC',
+  },
+  priceText: {
+    marginLeft: 8,
+    color: '#1B1B21',
+  },
+  footer: {
     padding: 16,
-    borderTopWidth: 1,
+    backgroundColor: 'white',
   },
   bookButton: {
-    flex: 1,
+    borderRadius: 100,
+    height: 56,
   },
   bookButtonContent: {
-    paddingVertical: 8,
+    height: 56,
   },
 });
 
