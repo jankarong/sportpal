@@ -177,11 +177,14 @@ const BookingDetailScreen = ({ route, navigation }) => {
               contentStyle={styles.bookButtonContent}
               onPress={() => {
                 if (selectedTimeSlot) {
-                  navigation.navigate('BookingConfirmation', { 
+                  navigation.navigate('BookingPayment', { 
                     courtId,
                     date: formatDate(date),
-                    time: selectedTimeSlot ? `${selectedTimeSlot} - ${getEndTime(selectedTimeSlot)}` : ''
+                    time: selectedTimeSlot ? `${selectedTimeSlot} - ${getEndTime(selectedTimeSlot)}` : '',
+                    price: court.price, 
                   });
+                } else {
+                  alert('Please select a time slot to proceed.');
                 }
               }}
             >
