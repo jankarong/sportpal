@@ -16,8 +16,7 @@ import BookingDetailScreen from './screens/BookingDetailScreen';
 import BookingConfirmationScreen from './screens/BookingConfirmationScreen';
 import SavedEventsSection from './screens/SavedEventsSection';
 import PaymentSuccessScreen from './screens/PaymentSuccessScreen';
-
-
+import BookingPaymentScreen from './screens/BookingPaymentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +76,11 @@ export default function App() {
           <Stack.Screen 
             name="PaymentSuccessScreen" 
             component={PaymentSuccessScreen} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="BookingPayment" 
+            component={BookingPaymentScreen} 
             options={{ headerShown: false }} 
           />
         </Stack.Navigator>
