@@ -1,10 +1,64 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { Text, Card, useTheme, IconButton } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import { images, avatars } from '../data/imageDatabase';
 
-const SavedEventsSection = () => {
+const EventCard = ({ title, date, location, spots, price, distance, host, image, onRemove, onPress }) => {
+  const theme = useTheme();
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Card style={styles.card} mode="elevated">
+        <Card.Content style={styles.cardContent}>
+          <Image 
+            source={images[image]} 
+            style={styles.eventImage} 
+          />
+          <View style={styles.contentContainer}>
+            <Text variant="titleMedium" style={styles.title}>{title}</Text>
+            <Text variant="bodyMedium" style={[styles.date, { color: theme.colors.primary }]}>
+              {date}
+            </Text>nbjbnjlbl;bjl
+            
+            <View style={styles.infoRow}>
+              <View style={styles.infoItem}>
+                <Text variant="bodyMedium">{location}</Text>
+              </View>
+              <View style={styles.infoItem}>
+                <Text variant="bodyMedium" style={styles.spots}>{spots}</Text>
+              </View>
+              <View style={styles.infoItem}>
+                <Text variant="bodyMedium" style={[styles.price, { color: theme.colors.onSurface }]}>{price}</Text>
+              </View>
+            </View>
+
+            <View style={styles.bottomRow}>
+              <View style={styles.hostInfo}>
+                <Image 
+                  source={avatars[host?.avatar]}
+                  style={styles.avatar}
+                />
+                <Text variant="bodyMedium">{host?.name}</Text>
+                <Text variant="bodyMedium" style={styles.distance}>{distance}</Text>
+              </View>
+              <View style={styles.actions}>
+                <IconButton icon="delete-outline" size={20} onPress={(e) => {
+                  e.stopPropagation();
+                  onRemove();
+                }} />
+              </View>
+            </View>
+          </View>
+        </Card.Content>
+      </Card>
+    </TouchableOpacity>
+  );
+};
+
+const SavedEventsSection = ({ navigation }) => {
   const [savedEvents, setSavedEvents] = useState([]);
+  const theme = useTheme();
 
   const fetchSavedEvents = async () => {
     try {
@@ -27,15 +81,8 @@ const SavedEventsSection = () => {
     }
   };
 
-  const confirmRemoveEvent = (eventTitle) => {
-    Alert.alert(
-      "Remove Event",
-      `Are you sure you want to remove "${eventTitle}"?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "Remove", onPress: () => removeEvent(eventTitle) }
-      ]
-    );
+  const handleEventPress = (event) => {
+    navigation.navigate('EventDetail', { event });
   };
 
   useFocusEffect(
@@ -45,36 +92,46 @@ const SavedEventsSection = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Saved Events</Text>
-      {savedEvents.length === 0 ? (
-        <Text style={styles.noEventsText}>No saved events yet!</Text>
-      ) : (
-        <FlatList
-          data={savedEvents}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.eventItem}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text>{item.date}</Text>
-              <Text>{item.location}</Text>
-              <TouchableOpacity onPress={() => confirmRemoveEvent(item.title)} style={styles.deleteButton}>
-                <Text style={styles.deleteButtonText}>Remove</Text>
-              </TouchableOpacity>
-            </View>
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 0, backgroundColor: theme.colors.primary }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+          <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+            <IconButton 
+              icon="chevron-left" 
+              size={24} 
+              iconColor={theme.colors.onPrimary}
+              onPress={() => navigation.goBack()} 
+            />
+            <Text variant="titleLarge" style={[styles.headerTitle, { color: theme.colors.onPrimary }]}>
+              Saved Events
+            </Text>
+            <View style={{ width: 48 }} />
+          </View>
+
+          {savedEvents.length === 0 ? (
+            <Text style={styles.noEventsText}>No saved events yet!</Text>
+          ) : (
+            <ScrollView style={styles.scrollView}>
+              {savedEvents.map((event, index) => (
+                <EventCard
+                  key={index}
+                  {...event}
+                  onRemove={() => removeEvent(event.title)}
+                  onPress={() => handleEventPress(event)}
+                />
+              ))}
+            </ScrollView>
           )}
-        />
-      )}
+        </View>
+      </SafeAreaView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    marginVertical: 10,
+    flex: 1,
   },
   heading: {
     color: '#2955F9',
@@ -82,31 +139,76 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
   },
-  noEventsText: {
-    fontStyle: 'italic',
-    color: 'gray',
+  headerTitle: {
+    flex: 1,
     textAlign: 'center',
-    marginTop: 20,
   },
-  eventItem: {
-    padding: 8,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 8,
+  scrollView: {
+    flex: 1,
+    padding: 16,
+  },
+  card: {
+    marginBottom: 16,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    padding: 12,
+  },
+  eventImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginRight: 12,
+  },
+  contentContainer: {
+    flex: 1,
   },
   title: {
-    fontWeight: 'bold',
+    marginBottom: 4,
   },
-  deleteButton: {
-    marginTop: 5,
-    backgroundColor: '#FFC43A', 
-    padding: 5,
-    borderRadius: 5,
+  date: {
+    marginBottom: 4,
   },
-  deleteButtonText: {
-    color: 'black',
-    fontWeight: 'bold',
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  infoItem: {
+    flex: 1,
+  },
+  spots: {
     textAlign: 'center',
+  },
+  price: {
+    textAlign: 'right',
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  hostInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  avatar: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    marginRight: 8,
+  },
+  distance: {
+    marginLeft: 8,
+    color: 'gray',
+  },
+  actions: {
+    flexDirection: 'row',
+  },
+  noEventsText: {
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 

@@ -14,6 +14,8 @@ import EventDetailScreen from './screens/EventDetailScreen';
 import EventPaymentScreen from './screens/EventPaymentScreen';
 import BookingDetailScreen from './screens/BookingDetailScreen';
 import BookingConfirmationScreen from './screens/BookingConfirmationScreen';
+import SavedEventsSection from './screens/SavedEventsSection';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -31,12 +33,12 @@ export default function App() {
           <Stack.Screen 
             name="Login" 
             component={LoginScreen}
-            options={{ title: 'Login' }}
+            options={{ headerShown: false}}
           />
           <Stack.Screen 
             name="SignUp" 
             component={SignUpScreen}
-            options={{ title: 'Sign up' }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen 
             name="MainTabs" 
@@ -62,6 +64,14 @@ export default function App() {
             name="BookingConfirmation"
             component={BookingConfirmationScreen}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SavedEventsScreen"
+            component={SavedEventsSection}
+            options={{ 
+              title: 'Saved Events',
+              headerShown: false
+            }}
           />
         </Stack.Navigator>
         <StatusBar style="auto" />

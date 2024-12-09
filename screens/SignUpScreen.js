@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { Button, Text, TextInput, Checkbox, Divider } from 'react-native-paper';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { height } = Dimensions.get('window');
 
@@ -120,7 +122,9 @@ export default function SignUpScreen({ navigation }) {
                         <View style={styles.socialButtonsRow}>
                             <Button
                                 mode="outlined"
-                                icon="google"
+                                icon={({ size }) => (
+                                    <FontAwesome name="google" size={size} color="#4285F4" />
+                                )}
                                 onPress={() => {}}
                                 style={styles.socialButton}
                                 contentStyle={styles.socialButtonContent}
@@ -130,7 +134,9 @@ export default function SignUpScreen({ navigation }) {
                             
                             <Button
                                 mode="outlined"
-                                icon="apple"
+                                icon={({ size }) => (
+                                    <AntDesign name="apple1" size={size} color="#000000" />
+                                )}
                                 onPress={() => {}}
                                 style={styles.socialButton}
                                 contentStyle={styles.socialButtonContent}
@@ -151,8 +157,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#2955F9',
     },
     logoContainer: {
-        height: height * 0.12,
+        height: height * 0.13,
         justifyContent: 'center',
+        marginTop: height * 0.02,
     },
     logoContent: {
         alignItems: 'left',

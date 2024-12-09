@@ -1,12 +1,51 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Image, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Text, IconButton, Button, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { images, avatars } from '../data/imageDatabase';
 
 const EventDetailScreen = ({ route, navigation }) => {
   const { event } = route.params;
   const theme = useTheme();
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    checkIfSaved();
+  }, []);
+
+  const checkIfSaved = async () => {
+    try {
+      const savedEvents = await AsyncStorage.getItem('savedEvents');
+      if (savedEvents) {
+        const events = JSON.parse(savedEvents);
+        setIsSaved(events.some(e => e.title === event.title));
+      }
+    } catch (error) {
+      console.error('Error checking saved status:', error);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const savedEvents = await AsyncStorage.getItem('savedEvents');
+      let events = savedEvents ? JSON.parse(savedEvents) : [];
+      
+      if (isSaved) {
+        // Remove event if already saved
+        events = events.filter(e => e.title !== event.title);
+        setIsSaved(false);
+      } else {
+        // Add event if not saved
+        events.push(event);
+        setIsSaved(true);
+      }
+      
+      await AsyncStorage.setItem('savedEvents', JSON.stringify(events));
+    } catch (error) {
+      console.error('Error saving event:', error);
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -24,7 +63,12 @@ const EventDetailScreen = ({ route, navigation }) => {
               Event Details
             </Text>
             <View style={styles.headerActions}>
-              <IconButton icon="bookmark-outline" size={24} iconColor={theme.colors.onPrimary} />
+              <IconButton 
+                icon={isSaved ? "bookmark" : "bookmark-outline"} 
+                size={24} 
+                iconColor={theme.colors.onPrimary}
+                onPress={handleSave}
+              />
               <IconButton icon="share-variant-outline" size={24} iconColor={theme.colors.onPrimary} />
             </View>
           </View>

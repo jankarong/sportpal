@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, StatusBar, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import { Text, Card, Avatar, useTheme, IconButton } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import images from database
 import { images, avatars } from '../data/imageDatabase';
 import { events } from '../data/eventDatabase';
 
-const EventCard = ({ title, date, location, spots, price, distance, host, image, onBookmark, onShare, onPress }) => {
+const EventCard = ({ title, date, location, spots, price, distance, host, image, onBookmark, onShare, onPress, isSaved }) => {
   const theme = useTheme();
   return (
     <TouchableOpacity onPress={onPress}>
@@ -45,7 +46,12 @@ const EventCard = ({ title, date, location, spots, price, distance, host, image,
                 <Text variant="bodyMedium" style={styles.distance}>{distance}</Text>
               </View>
               <View style={styles.actions}>
-                <IconButton icon="bookmark-outline" size={20} onPress={onBookmark} />
+                <IconButton 
+                  icon={isSaved ? "bookmark" : "bookmark-outline"} 
+                  size={20} 
+                  onPress={onBookmark}
+                  iconColor={isSaved ? theme.colors.primary : undefined}
+                />
                 <IconButton icon="share-variant-outline" size={20} onPress={onShare} />
               </View>
             </View>
@@ -58,6 +64,50 @@ const EventCard = ({ title, date, location, spots, price, distance, host, image,
 
 export default function HomeScreen({ navigation }) {
   const theme = useTheme();
+  const [savedEvents, setSavedEvents] = useState({});
+
+  React.useEffect(() => {
+    loadSavedEvents();
+  }, []);
+
+  const loadSavedEvents = async () => {
+    try {
+      const saved = await AsyncStorage.getItem('savedEvents');
+      if (saved) {
+        const savedEventsArray = JSON.parse(saved);
+        const savedEventsMap = {};
+        savedEventsArray.forEach(event => {
+          savedEventsMap[event.title] = true;
+        });
+        setSavedEvents(savedEventsMap);
+      }
+    } catch (error) {
+      console.error('Error loading saved events:', error);
+    }
+  };
+
+  const handleBookmark = async (event) => {
+    try {
+      const saved = await AsyncStorage.getItem('savedEvents');
+      let savedEventsArray = saved ? JSON.parse(saved) : [];
+      
+      if (savedEvents[event.title]) {
+        // Remove event if already saved
+        savedEventsArray = savedEventsArray.filter(e => e.title !== event.title);
+        const newSavedEvents = { ...savedEvents };
+        delete newSavedEvents[event.title];
+        setSavedEvents(newSavedEvents);
+      } else {
+        // Add event if not saved
+        savedEventsArray.push(event);
+        setSavedEvents({ ...savedEvents, [event.title]: true });
+      }
+      
+      await AsyncStorage.setItem('savedEvents', JSON.stringify(savedEventsArray));
+    } catch (error) {
+      console.error('Error saving event:', error);
+    }
+  };
 
   const handleEventPress = (event) => {
     navigation.navigate('EventDetail', { event });
@@ -85,7 +135,8 @@ export default function HomeScreen({ navigation }) {
               <EventCard
                 key={index}
                 {...event}
-                onBookmark={() => {}}
+                isSaved={savedEvents[event.title]}
+                onBookmark={() => handleBookmark(event)}
                 onShare={() => {}}
                 onPress={() => handleEventPress(event)}
               />
