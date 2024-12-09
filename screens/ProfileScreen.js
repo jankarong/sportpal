@@ -2,6 +2,8 @@ import React from 'react';
 import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { Text, useTheme, Divider } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SavedEventsSection from './SavedEventsSection';
+
 
 export default function ProfileScreen() {
   const theme = useTheme();
@@ -28,7 +30,7 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.card}>
-          <SettingItem icon="bookmark-outline" label="Saved Events" />
+          <SettingItem icon="bookmark-outline" label="Saved Events" onPress={() => navigation.navigate('SavedEventsScreen')}/>
           <SettingItem icon="history" label="Past Events" />
           <SettingItem icon="pencil-outline" label="Manage Events" />
           <SettingItem icon="map-marker-outline" label="Venue Registration" />
@@ -39,6 +41,7 @@ export default function ProfileScreen() {
           <SettingItem icon="email-outline" label="Contact us" />
           <SettingItem icon="lock-outline" label="Privacy policy" />
         </View>
+        <SavedEventsSection />
       </ScrollView>
 
       
