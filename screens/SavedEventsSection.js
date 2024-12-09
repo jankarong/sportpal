@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   heading: {
+    color: '#2955F9',
     fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 10,
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     marginTop: 5,
-    backgroundColor: '#FFC43A', // Keep the same yellow style for "Remove" button
+    backgroundColor: '#FFC43A', 
     padding: 5,
     borderRadius: 5,
   },
