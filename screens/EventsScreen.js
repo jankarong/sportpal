@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, StatusBar, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import { Text, Card, Avatar, useTheme, IconButton } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import images from database
 import { images, avatars } from '../data/imageDatabase';
 import { events } from '../data/eventDatabase';
 import { categories } from '../data/categoryDatabase';
+
+
 
 const EventCard = ({ title, date, location, spots, price, distance, host, image, onBookmark, onShare, onPress }) => {
   const theme = useTheme();
@@ -74,6 +77,31 @@ export default function EventsScreen({ navigation }) {
     return event.title.toLowerCase().includes(selectedCategory.toLowerCase());
   });
 
+  const handleBookmark = async (event) => {
+    console.log('Event to Save:', event); // Debugging log
+    if (!event || !event.title) {
+      console.error('Invalid event data:', event);
+      alert('Failed to save. Invalid event.');
+      return;
+    }
+    try {
+      const savedEvents = JSON.parse(await AsyncStorage.getItem('savedEvents')) || [];
+      if (savedEvents.some((savedEvent) => savedEvent.title === event.title)) {
+        alert('Event is already saved!');
+        return;
+      }
+      const updatedEvents = [...savedEvents, event];
+      await AsyncStorage.setItem('savedEvents', JSON.stringify(updatedEvents));
+      alert('Event saved successfully!');
+    } catch (error) {
+      console.error('Error saving event:', error);
+      alert('Failed to save event. Please try again.');
+    }
+  };
+  
+  
+  
+
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={{ flex: 0, backgroundColor: theme.colors.primary }} />
@@ -140,12 +168,12 @@ export default function EventsScreen({ navigation }) {
           <ScrollView style={styles.scrollView}>
             {filteredEvents.map((event, index) => (
               <EventCard
-                key={index}
-                {...event}
-                onBookmark={() => {}}
-                onShare={() => {}}
-                onPress={() => handleEventPress(event)}
-              />
+              key={index}
+              {...event}
+              onBookmark={() => handleBookmark(event)} // Pass the function here
+              onShare={() => {}}
+              onPress={() => handleEventPress(event)}
+            />
             ))}
           </ScrollView>
         </View>
