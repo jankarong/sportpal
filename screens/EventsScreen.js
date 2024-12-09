@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, StatusBar, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import { Text, Card, Avatar, useTheme, IconButton } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,9 +9,7 @@ import { images, avatars } from '../data/imageDatabase';
 import { events } from '../data/eventDatabase';
 import { categories } from '../data/categoryDatabase';
 
-
-
-const EventCard = ({ title, date, location, spots, price, distance, host, image, onBookmark, onShare, onPress }) => {
+const EventCard = ({ title, date, location, spots, price, distance, host, image, onBookmark, onShare, onPress, isSaved }) => {
   const theme = useTheme();
   return (
     <Card style={styles.card} mode="elevated" onPress={onPress}>
@@ -48,7 +46,12 @@ const EventCard = ({ title, date, location, spots, price, distance, host, image,
               <Text variant="bodyMedium" style={styles.distance}>{distance}</Text>
             </View>
             <View style={styles.actions}>
-              <IconButton icon="bookmark-outline" size={20} onPress={onBookmark} />
+              <IconButton 
+                icon={isSaved ? "bookmark" : "bookmark-outline"} 
+                size={20} 
+                onPress={onBookmark}
+                iconColor={isSaved ? theme.colors.primary : undefined}
+              />
               <IconButton icon="share-variant-outline" size={20} onPress={onShare} />
             </View>
           </View>
@@ -67,6 +70,27 @@ export default function EventsScreen({ navigation }) {
     distance: null,
     price: null,
   });
+  const [savedEvents, setSavedEvents] = useState({});
+
+  useEffect(() => {
+    loadSavedEvents();
+  }, []);
+
+  const loadSavedEvents = async () => {
+    try {
+      const saved = await AsyncStorage.getItem('savedEvents');
+      if (saved) {
+        const savedEventsArray = JSON.parse(saved);
+        const savedEventsMap = {};
+        savedEventsArray.forEach(event => {
+          savedEventsMap[event.title] = true;
+        });
+        setSavedEvents(savedEventsMap);
+      }
+    } catch (error) {
+      console.error('Error loading saved events:', error);
+    }
+  };
 
   const handleEventPress = (event) => {
     navigation.navigate('EventDetail', { event });
@@ -78,29 +102,27 @@ export default function EventsScreen({ navigation }) {
   });
 
   const handleBookmark = async (event) => {
-    console.log('Event to Save:', event); // Debugging log
-    if (!event || !event.title) {
-      console.error('Invalid event data:', event);
-      alert('Failed to save. Invalid event.');
-      return;
-    }
     try {
-      const savedEvents = JSON.parse(await AsyncStorage.getItem('savedEvents')) || [];
-      if (savedEvents.some((savedEvent) => savedEvent.title === event.title)) {
-        alert('Event is already saved!');
-        return;
+      const saved = await AsyncStorage.getItem('savedEvents');
+      let savedEventsArray = saved ? JSON.parse(saved) : [];
+      
+      if (savedEvents[event.title]) {
+        // Remove event if already saved
+        savedEventsArray = savedEventsArray.filter(e => e.title !== event.title);
+        const newSavedEvents = { ...savedEvents };
+        delete newSavedEvents[event.title];
+        setSavedEvents(newSavedEvents);
+      } else {
+        // Add event if not saved
+        savedEventsArray.push(event);
+        setSavedEvents({ ...savedEvents, [event.title]: true });
       }
-      const updatedEvents = [...savedEvents, event];
-      await AsyncStorage.setItem('savedEvents', JSON.stringify(updatedEvents));
-      alert('Event saved successfully!');
+      
+      await AsyncStorage.setItem('savedEvents', JSON.stringify(savedEventsArray));
     } catch (error) {
       console.error('Error saving event:', error);
-      alert('Failed to save event. Please try again.');
     }
   };
-  
-  
-  
 
   return (
     <View style={{ flex: 1 }}>
@@ -168,12 +190,13 @@ export default function EventsScreen({ navigation }) {
           <ScrollView style={styles.scrollView}>
             {filteredEvents.map((event, index) => (
               <EventCard
-              key={index}
-              {...event}
-              onBookmark={() => handleBookmark(event)} // Pass the function here
-              onShare={() => {}}
-              onPress={() => handleEventPress(event)}
-            />
+                key={index}
+                {...event}
+                onBookmark={() => handleBookmark(event)}
+                onShare={() => {}}
+                onPress={() => handleEventPress(event)}
+                isSaved={savedEvents[event.title]}
+              />
             ))}
           </ScrollView>
         </View>

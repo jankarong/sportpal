@@ -1,27 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { Text } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get('window');
 
 export default function WelcomeScreen({ navigation }) {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            navigation.navigate('Login');
+        }, 2000); 
+
+        return () => clearTimeout(timer); 
+    }, []);
+
     return (
         <View style={styles.container}>
-
             <Image 
                 source={require('../assets/image/welcome-page.png')}
                 style={styles.image}
                 resizeMode="cover"
             />
-            
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity 
-                    style={styles.button}
-                    onPress={() => navigation.navigate('Login')}
-                >
-                    <Text style={styles.buttonText}>Get Started</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity 
+                style={styles.arrowContainer}
+                onPress={() => navigation.navigate('Login')}
+            >
+                <MaterialCommunityIcons 
+                    name="arrow-right-circle" 
+                    size={40} 
+                    color="#FFCC5F"
+                />
+            </TouchableOpacity>
         </View>
     );
 }
@@ -36,23 +44,10 @@ const styles = StyleSheet.create({
         height: height,
         position: 'absolute',
     },
-    buttonContainer: {
+    arrowContainer: {
         position: 'absolute',
-        bottom: 66,
-        left: 24,
-        right: 24,
-    },
-    button: {
-        backgroundColor: '#FFCC5F',
-        height: 45,
-        borderRadius: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: 'transparent',
-    },
-    buttonText: {
-        color: '#000000',
-        fontSize: 16,
-        fontWeight: '500',
+        bottom: 40,
+        right: 30,
+        padding: 10,
     }
 });
