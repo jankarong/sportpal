@@ -69,16 +69,16 @@ const EventPaymentScreen = ({ route, navigation }) => {
           </View>
 
           <View style={styles.paymentButtons}>
-            <TouchableOpacity 
+          <TouchableOpacity 
               style={styles.paypalButton}
-              onPress={() => {/* Handle PayPal payment */}}
+              onPress={() => navigation.navigate('PaymentSuccessScreen', { event })}
             >
               <Text style={styles.paypalText}>PayPal</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.creditCardButton}
-              onPress={() => {/* Handle credit card payment */}}
+              onPress={() => navigation.navigate('PaymentSuccessScreen', { event })}
             >
               <MaterialCommunityIcons name="credit-card-outline" size={20} color="white" />
               <Text style={styles.creditCardText}>Credit or debit card</Text>
