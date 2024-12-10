@@ -8,6 +8,7 @@ import BookScreen from '../screens/BookScreen';
 import AddScreen from '../screens/AddScreen';
 import EventsScreen from '../screens/EventsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import CreateEventScreen from '../screens/CreateEventScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -49,7 +50,7 @@ export default function BottomNavigation() {
       />
       <Tab.Screen
         name="Add"
-        component={AddScreen}
+        component={CreateEventScreen}
         options={{
           tabBarLabel: 'Add',
           tabBarIcon: ({ color }) => (

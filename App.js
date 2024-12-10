@@ -17,6 +17,10 @@ import BookingConfirmationScreen from './screens/BookingConfirmationScreen';
 import SavedEventsSection from './screens/SavedEventsSection';
 import PaymentSuccessScreen from './screens/PaymentSuccessScreen';
 import BookingPaymentScreen from './screens/BookingPaymentScreen';
+import SuccessEventScreen from './screens/SuccessEventScreen';
+import CreateEventScreen from './screens/CreateEventScreen';
+
+
 
 const Stack = createNativeStackNavigator();
 
@@ -83,6 +87,33 @@ export default function App() {
             component={BookingPaymentScreen} 
             options={{ headerShown: false }} 
           />
+          {/* <Stack.Screen
+          name="SuccessEventScreen"
+          component={SuccessEventScreen}
+          options={{ headerShown: false }}
+          />
+          <Stack.Screen
+          name="CreateEventScreen"
+          component={CreateEventScreen}
+          options={{ headerShown: false }}
+          /> */}
+          <Stack.Screen
+              name="CreateEventScreen"
+              component={CreateEventScreen}
+              options={{
+                  title: 'Create Event', 
+                  headerShown: true, 
+              }}
+          />
+          <Stack.Screen
+              name="SuccessEventScreen" 
+              component={SuccessEventScreen}
+              options={{
+                  title: 'Success', 
+                  headerShown: false, 
+              }}
+          />
+
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>
