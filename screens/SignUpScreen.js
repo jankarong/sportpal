@@ -1,17 +1,58 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-import { Button, Text, TextInput, Checkbox, Divider } from 'react-native-paper';
+import { View, Alert, Image, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { Button, Text, TextInput, Checkbox } from 'react-native-paper';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../backend/firebase';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { height } = Dimensions.get('window');
 
 export default function SignUpScreen({ navigation }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [termsAccepted, setTermsAccepted] = useState(false);
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleSignUp = async () => {
+        if (!validateEmail(email)) {
+            Alert.alert('Invalid Email', 'Please enter a valid email address.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Password Mismatch', 'Passwords do not match.');
+            return;
+        }
+
+        if (!termsAccepted) {
+            Alert.alert('Terms Not Accepted', 'Please accept the terms and conditions.');
+            return;
+        }
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            Alert.alert('Success', 'Account created successfully!');
+            navigation.navigate('MainTabs'); // Replace with your target screen
+        } catch (error) {
+            let message = 'An error occurred. Please try again.';
+            if (error.code === 'auth/email-already-in-use') {
+                message = 'This email is already in use.';
+            } else if (error.code === 'auth/weak-password') {
+                message = 'Password should be at least 6 characters.';
+            } else if (error.code === 'auth/invalid-email') {
+                message = 'Invalid email address.';
+            }
+            Alert.alert('Signup Failed', message);
+        }
+    };
 
     return (
         <ScrollView style={styles.container} bounces={false}>
-
             <View style={styles.logoContainer}>
                 <View style={styles.logoContent}>
                     <Image
@@ -53,17 +94,31 @@ export default function SignUpScreen({ navigation }) {
                     <TextInput
                         mode="outlined"
                         label="Email Address"
-                        style={styles.input}
+                        value={email}
+                        onChangeText={setEmail}
                         keyboardType="email-address"
                         autoCapitalize="none"
+                        style={styles.input}
                         dense
                     />
 
                     <TextInput
                         mode="outlined"
                         label="Password"
-                        style={styles.input}
+                        value={password}
+                        onChangeText={setPassword}
                         secureTextEntry
+                        style={styles.input}
+                        dense
+                    />
+
+                    <TextInput
+                        mode="outlined"
+                        label="Confirm Password"
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                        secureTextEntry
+                        style={styles.input}
                         dense
                     />
 
@@ -83,7 +138,7 @@ export default function SignUpScreen({ navigation }) {
 
                     <Button
                         mode="contained"
-                        onPress={() => navigation.navigate('MainTabs')}
+                        onPress={handleSignUp}
                         style={styles.signUpButton}
                         buttonColor="#FFCC5F"
                         textColor="#000000"
@@ -95,11 +150,16 @@ export default function SignUpScreen({ navigation }) {
                         <View style={styles.loginHeader}>
                             <Text style={styles.loginText}>
                                 Have an account?{' '}
-                                <Text style={styles.loginLink}>Log in now</Text>
+                                <Text
+                                    style={styles.loginLink}
+                                    onPress={() => navigation.navigate('Login')}
+                                >
+                                    Log in now
+                                </Text>
                             </Text>
                         </View>
 
-                        <View style={styles.inputGroup}>
+                        {/* <View style={styles.inputGroup}>
                             <Text style={styles.inputLabel}>Log in</Text>
                             <TextInput
                                 mode="flat"
@@ -117,9 +177,9 @@ export default function SignUpScreen({ navigation }) {
                             secureTextEntry
                             style={styles.loginInput}
                             dense
-                        />
+                        /> */}
 
-                        <View style={styles.socialButtonsRow}>
+                        {/* <View style={styles.socialButtonsRow}>
                             <Button
                                 mode="outlined"
                                 icon={({ size }) => (
@@ -131,7 +191,7 @@ export default function SignUpScreen({ navigation }) {
                             >
                                 Sign in with Google
                             </Button>
-                            
+
                             <Button
                                 mode="outlined"
                                 icon={({ size }) => (
@@ -143,7 +203,7 @@ export default function SignUpScreen({ navigation }) {
                             >
                                 Sign in with Apple
                             </Button>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
             </View>
