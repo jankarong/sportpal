@@ -13,7 +13,7 @@ const PaymentSuccessScreen = ({ navigation }) => {
 
           <Surface style={styles.successCard} elevation={0}>
             <Image
-              source={require('../assets/success.png')} // Replace with your success image
+              source={require('../assets/success.png')} 
               style={styles.successImage}
             />
             <Text style={styles.successTitle}>
@@ -24,7 +24,7 @@ const PaymentSuccessScreen = ({ navigation }) => {
           <Button
             mode="contained"
             style={styles.doneButton}
-            onPress={() => navigation.navigate('Home')} // Adjust as needed
+            onPress={() => navigation.navigate('Home')} 
           >
             View The Event
           </Button>
