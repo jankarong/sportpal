@@ -17,7 +17,6 @@ import BookingConfirmationScreen from './screens/BookingConfirmationScreen';
 import SavedEventsSection from './screens/SavedEventsSection';
 
 
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
