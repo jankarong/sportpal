@@ -3,14 +3,14 @@ import { View, StyleSheet, ScrollView, Image, Dimensions } from 'react-native';
 import { Text, TextInput, Button, Switch, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useNavigation } from '@react-navigation/native'; // 네비게이션 사용
+import { useNavigation } from '@react-navigation/native'; 
 
 // Import image
 const tennisImage = require('../assets/image/tennis.png');
 
 export default function CreateEventScreen() {
     const theme = useTheme();
-    const navigation = useNavigation(); // 네비게이션 객체 가져오기
+    const navigation = useNavigation(); 
     const [isApprovalRequired, setIsApprovalRequired] = useState(false);
     const [selectedDate, setSelectedDate] = useState('');
     const [isDatePickerVisible, setDatePickerVisible] = useState(false);
@@ -20,14 +20,14 @@ export default function CreateEventScreen() {
 
     const handleDateChange = (event, date) => {
         if (date) {
-            const formattedDate = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+            const formattedDate = date.toISOString().split('T')[0]; 
             setSelectedDate(formattedDate);
         }
         hideDatePicker();
     };
 
     const handleCreateEvent = () => {
-        navigation.navigate('SuccessEventScreen'); // SuccessEventScreen으로 이동
+        navigation.navigate('SuccessEventScreen'); 
     };
 
     return (
@@ -39,7 +39,7 @@ export default function CreateEventScreen() {
                     size={24}
                     color="#FFF"
                     style={styles.backIcon}
-                    onPress={() => navigation.goBack()} // 뒤로 가기
+                    onPress={() => navigation.goBack()} 
                 />
                 <View style={styles.imageWrapper}>
                     <Image
@@ -101,7 +101,6 @@ export default function CreateEventScreen() {
                             />
                         )}
                     </View>
-                    {/* 나머지 필드 */}
                     {/* Time Field */}
                     <View style={styles.fieldContainer}>
                         <Text style={styles.label}>Time</Text>
@@ -184,7 +183,7 @@ export default function CreateEventScreen() {
                         style={styles.createButton}
                         buttonColor="#FFCC5F"
                         textColor="#000"
-                        onPress={handleCreateEvent} // 버튼 클릭 시 이동
+                        onPress={handleCreateEvent} 
                     >
                         Create Event
                     </Button>
