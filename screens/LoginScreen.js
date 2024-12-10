@@ -1,12 +1,44 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../backend/firebase';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 const { height, width } = Dimensions.get('window');
 
 export default function LoginScreen({ navigation }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [isPressed, setIsPressed] = useState(false);
+
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleLogin = async () => {
+        if (!validateEmail(email)) {
+            Alert.alert('Invalid Email', 'Please enter a valid email address.');
+            return;
+        }
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            Alert.alert('Success', 'You are now logged in!');
+            navigation.navigate('MainTabs'); // Replace with your target screen
+        } catch (error) {
+            let message = 'An error occurred. Please try again.';
+            if (error.code === 'auth/wrong-password') {
+                message = 'Incorrect password. Please try again.';
+            } else if (error.code === 'auth/user-not-found') {
+                message = 'No account found with this email.';
+            } else if (error.code === 'auth/invalid-email') {
+                message = 'Invalid email address.';
+            }
+            Alert.alert('Login Failed', message);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -26,20 +58,21 @@ export default function LoginScreen({ navigation }) {
                         Welcome Back
                     </Text>
 
-                    <View style={styles.inputGroup}>
-                        <Text style={styles.inputLabel}>Log in</Text>
-                        <TextInput
-                            mode="flat"
-                            placeholder="Username"
-                            style={styles.input}
-                            autoCapitalize="none"
-                            underlineColor="transparent"
-                        />
-                    </View>
-                    
+                    <TextInput
+                        mode="outlined"
+                        label="Email Address"
+                        value={email}
+                        onChangeText={setEmail}
+                        keyboardType="email-address"
+                        style={styles.input}
+                        autoCapitalize="none"
+                    />
+
                     <TextInput
                         mode="outlined"
                         label="Password"
+                        value={password}
+                        onChangeText={setPassword}
                         secureTextEntry
                         style={styles.passwordInput}
                     />
@@ -56,7 +89,7 @@ export default function LoginScreen({ navigation }) {
                         >
                             Sign in with Google
                         </Button>
-                        
+
                         <Button
                             mode="outlined"
                             icon={({ size }) => (
@@ -90,7 +123,7 @@ export default function LoginScreen({ navigation }) {
 
                     <Button
                         mode="contained"
-                        onPress={() => navigation.navigate('MainTabs')}
+                        onPress={handleLogin}
                         style={styles.loginButton}
                         buttonColor="#FFCC5F"
                         textColor="#000000"
@@ -108,7 +141,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#2955F9',
     },
-     logoContainer: {
+    logoContainer: {
         height: height * 0.45,
         backgroundColor: '#2955F9',
         justifyContent: 'center',
@@ -148,25 +181,8 @@ const styles = StyleSheet.create({
         marginBottom: 24,
         fontWeight: '800',
     },
-    inputGroup: {
-        marginBottom: 16,
-        borderWidth: 1,
-        borderColor: '#E0E0E0',
-        borderRadius: 8,
-        backgroundColor: '#FFFFFF',
-    },
-    inputLabel: {
-        position: 'absolute',
-        top: -10,
-        left: 10,
-        backgroundColor: '#FFFFFF',
-        paddingHorizontal: 4,
-        color: '#2955F9',
-        fontSize: 14,
-        fontWeight: '500',
-        zIndex: 1,
-    },
     input: {
+        marginBottom: 16,
         backgroundColor: '#FFFFFF',
         height: 56,
     },
