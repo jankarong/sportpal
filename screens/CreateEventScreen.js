@@ -12,13 +12,19 @@ export default function CreateEventScreen() {
   const navigation = useNavigation();
   const [isApprovalRequired, setIsApprovalRequired] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
-  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [selectedStartTime, setSelectedStartTime] = useState('');
+  const [selectedEndTime, setSelectedEndTime] = useState('');
+  const [isDateBottomSheetVisible, setDateBottomSheetVisible] = useState(false);
+  const [isTimeBottomSheetVisible, setTimeBottomSheetVisible] = useState(false);
 
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const hours = Array.from({ length: 24 }, (_, i) => 
+    i.toString().padStart(2, '0') + ':00'
+  );
 
   const handleDaySelection = (day) => {
     setSelectedDate(day);
-    setBottomSheetVisible(false);
+    setDateBottomSheetVisible(false);
   };
 
   return (
@@ -79,7 +85,7 @@ export default function CreateEventScreen() {
                 size={24}
                 color={theme.colors.primary}
                 style={styles.dateIcon}
-                onPress={() => setBottomSheetVisible(true)}
+                onPress={() => setDateBottomSheetVisible(true)}
               />
             </View>
           </View>
@@ -88,21 +94,34 @@ export default function CreateEventScreen() {
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>Time</Text>
             <View style={styles.timeRow}>
-              <TextInput
-                mode="outlined"
-                placeholder="Start"
-                placeholderTextColor="#1A1B24"
-                style={[styles.input, styles.halfInput]}
-              />
-              <TextInput
-                mode="outlined"
-                placeholder="Finish"
-                placeholderTextColor="#1A1B24"
-                style={[styles.input, styles.halfInput]}
-              />
+              <TouchableOpacity 
+                style={{width: '48%'}}
+                onPress={() => setTimeBottomSheetVisible(true)}
+              >
+                <TextInput
+                  mode="outlined"
+                  placeholder="Start"
+                  value={selectedStartTime}
+                  placeholderTextColor="#1A1B24"
+                  style={[styles.input]}
+                  editable={false}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={{width: '48%'}}
+                onPress={() => setTimeBottomSheetVisible(true)}
+              >
+                <TextInput
+                  mode="outlined"
+                  placeholder="Finish"
+                  value={selectedEndTime}
+                  placeholderTextColor="#1A1B24"
+                  style={[styles.input]}
+                  editable={false}
+                />
+              </TouchableOpacity>
             </View>
           </View>
-
           {/* Location Field */}
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>Location</Text>
@@ -178,12 +197,12 @@ export default function CreateEventScreen() {
         </ScrollView>
       </View>
 
-      {/* Bottom Sheet Modal */}
+      {/* Date Bottom Sheet Modal */}
       <Modal
-        visible={isBottomSheetVisible}
+        visible={isDateBottomSheetVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setBottomSheetVisible(false)}
+        onRequestClose={() => setDateBottomSheetVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.bottomSheet}>
@@ -208,7 +227,65 @@ export default function CreateEventScreen() {
               style={styles.applyButton}
               buttonColor="#FFCC5F"
               textColor="#000"
-              onPress={() => setBottomSheetVisible(false)}
+              onPress={() => setDateBottomSheetVisible(false)}
+            >
+              Apply
+            </Button>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Time Bottom Sheet Modal */}
+      <Modal
+        visible={isTimeBottomSheetVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setTimeBottomSheetVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.bottomSheet}>
+            <View style={styles.timeHeaderRow}>
+              <Text style={styles.timeColumnTitle}>Start</Text>
+              <Text style={styles.timeColumnTitle}>Finish</Text>
+            </View>
+            <ScrollView style={styles.timeList}>
+              <View style={styles.timeColumns}>
+                <View style={styles.timeColumn}>
+                  {hours.map((time) => (
+                    <TouchableOpacity
+                      key={time}
+                      style={[
+                        styles.timeOption,
+                        selectedStartTime === time && styles.selectedTimeOption,
+                      ]}
+                      onPress={() => setSelectedStartTime(time)}
+                    >
+                      <Text style={styles.timeText}>{time}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+                <View style={styles.timeColumn}>
+                  {hours.map((time) => (
+                    <TouchableOpacity
+                      key={time}
+                      style={[
+                        styles.timeOption,
+                        selectedEndTime === time && styles.selectedTimeOption,
+                      ]}
+                      onPress={() => setSelectedEndTime(time)}
+                    >
+                      <Text style={styles.timeText}>{time}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            </ScrollView>
+            <Button
+              mode="contained"
+              style={styles.applyButton}
+              buttonColor="#FFCC5F"
+              textColor="#000"
+              onPress={() => setTimeBottomSheetVisible(false)}
             >
               Apply
             </Button>
@@ -367,6 +444,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   halfInput: {
-    width: '48%', 
+    width: '48%',
+  },
+  timeHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
+  timeColumnTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    width: '48%',
+    textAlign: 'center',
+  },
+  timeColumns: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+  },
+  timeColumn: {
+    width: '48%',
+  },
+  timeOption: {
+    padding: 12,
+    marginBottom: 8,
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+  },
+  selectedTimeOption: {
+    backgroundColor: '#E6E6E6',
+  },
+  timeText: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  timeList: {
+    maxHeight: 300,
   },
 });
